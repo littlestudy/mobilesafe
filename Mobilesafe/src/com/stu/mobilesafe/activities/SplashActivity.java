@@ -25,6 +25,7 @@ public class SplashActivity extends Activity {
 		
 		playAnimation();
 		
+		// dev
 	}
 	
 	
