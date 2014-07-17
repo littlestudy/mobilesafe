@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="serverurl">http://10.110.19.92:8080/WebServer/info.html</string>
+    <string name="serverurl">http://192.168.2.51:8080/WebService/info.html</string>
 </resources>

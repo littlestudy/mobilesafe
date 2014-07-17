@@ -178,7 +178,7 @@ public class SplashActivity extends Activity {
 					URL url = new URL(getResources().getString(R.string.serverurl));
 					HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 					conn.setRequestMethod("GET"); //区分大小写
-					conn.setConnectTimeout(3000); //设置连接超时时间
+					conn.setConnectTimeout(2000); //设置连接超时时间
 					int code = conn.getResponseCode();//获取服务器状态码
 					if (code == 200){//请求成功
 						Log.i(TAG, "code:" + code);
