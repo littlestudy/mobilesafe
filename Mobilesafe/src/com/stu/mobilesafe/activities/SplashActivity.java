@@ -168,7 +168,7 @@ public class SplashActivity extends Activity {
 	}
 	
 	private void checkVersion(){
-		Log.i(TAG, "checkVersion");
+		Log.i(TAG, " start checkVersion()");
 		new Thread(){
 			public void run() {
 				Message msg = Message.obtain();
@@ -217,8 +217,10 @@ public class SplashActivity extends Activity {
 					msg.what = JSON_ERROR;
 				} finally {					
 					long endTime = System.currentTimeMillis();
-					long dTime = startTime - endTime;
+					long dTime = endTime - startTime;
+					Log.i(TAG, dTime + "");
 					if (dTime < 2000){
+						
 						SystemClock.sleep(2000 - dTime);
 					}
 					handler.sendMessage(msg);
@@ -236,6 +238,7 @@ public class SplashActivity extends Activity {
 	}
 	
 	private void playAnimation(){
+		Log.i(TAG, "start playAnimation()");
 		AlphaAnimation aa = new AlphaAnimation(0.5f, 1.0f);
 		aa.setDuration(2000);
 		rl_splash_root.startAnimation(aa);

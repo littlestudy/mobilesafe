@@ -3,20 +3,27 @@ package com.stu.mobilesafe.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stu.mobilesafe.R;
+import com.stu.mobilesafe.utils.Md5Utils;
 
 public class HomeActivity extends Activity {
 
@@ -55,7 +62,7 @@ public class HomeActivity extends Activity {
 						Log.i(TAG, "没有设置过密码，弹出设置密码对话框");
 						showSetupPasswordDialog();
 					} else {
-												// 设置过密码
+						// 设置过密码
 						Log.i(TAG, "设置过密码,弹出输入密码对话框");
 						showEnterPasswordDialog();
 					}
@@ -66,20 +73,101 @@ public class HomeActivity extends Activity {
 		});
 	}
 	
+	//享元模式
 	private AlertDialog dialog;
+	private EditText et_password;
+	private EditText et_password_confirm;
+	private Button bt_ok;
+	private Button bt_cancel;
 	
 	private void showSetupPasswordDialog() {
+		// 自定义内容的对话框
 		AlertDialog.Builder builer = new Builder(this);
 		View view = View.inflate(getApplicationContext(), R.layout.dialog_setup_pwd, null);
+		et_password = (EditText) view.findViewById(R.id.et_password);
+		et_password_confirm = (EditText) view.findViewById(R.id.et_password_confirm);
+		bt_ok = (Button)view.findViewById(R.id.bt_ok);
+		bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
+		
+		bt_ok.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				String password = et_password.getText().toString().trim();
+				String password_confirm = et_password_confirm.getText().toString().trim();
+				if (TextUtils.isEmpty(password) || TextUtils.isEmpty(password_confirm)){
+					Toast.makeText(getApplicationContext(), "密码不能为空，请重新输入！", 0).show();
+					return;
+				}
+				
+				if (!password.equals(password_confirm)){
+					Toast.makeText(getApplicationContext(), "两次输入的密码不相同！", 0).show();
+					return;
+				}
+				
+				Editor editor = sp.edit();
+				editor.putString("password", Md5Utils.encode(password));
+				editor.commit();
+				dialog.dismiss();
+			}
+		});
+		
+		bt_cancel.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		
 		builer.setView(view);
 		dialog = builer.create();
 		dialog.show();
 	}
 	
 	private void showEnterPasswordDialog() {
-				// TODO Auto-generated method stub
+		// 自定义内容的对话框
+		AlertDialog.Builder builer = new Builder(this);
+		View view = View.inflate(getApplicationContext(), R.layout.dialog_enter_pwd, null);
+		et_password = (EditText) view.findViewById(R.id.et_password);		
+		bt_ok = (Button)view.findViewById(R.id.bt_ok);
+		bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
+		
+		bt_ok.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				//用户输入的密码。
+				String password = et_password.getText().toString().trim();
+				if (TextUtils.isEmpty(password)){
+					Toast.makeText(getApplicationContext(), "密码不能为空，请重新输入！", 0).show();
+					return;
+				}
+				//得到原来保存的密码加密后的密文
+				String savedPassword = sp.getString("password", "");
 				
+				if (!savedPassword.equals(Md5Utils.encode(password))){
+					Toast.makeText(getApplicationContext(), "输入密码不正确！", 0).show();
+					return;
+				}
+				
+				//密码正确，进入手机防盗的界面。
+				Intent intent = new Intent();
+				intent.setClass(HomeActivity.this, LostFindActivity.class);
+				startActivity(intent);
+				dialog.dismiss();
+			}
+		});
+		
+		bt_cancel.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		
+		builer.setView(view);
+		dialog = builer.create();
+		dialog.show();		
 	}
+	
 	// Default Simple Basic Base
 	private class HomeAdapter extends BaseAdapter{
 		@Override
