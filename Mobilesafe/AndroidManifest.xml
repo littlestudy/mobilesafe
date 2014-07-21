@@ -10,6 +10,9 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     
     <application
         android:allowBackup="true"
@@ -32,6 +35,14 @@
         <activity android:name="com.stu.mobilesafe.activities.Setup2Activity"></activity>
         <activity android:name="com.stu.mobilesafe.activities.Setup3Activity"></activity>
         <activity android:name="com.stu.mobilesafe.activities.Setup4Activity"></activity>
+        
+        <!-- 注册开机启动的广播接收者，注意也要添加权限 -->
+        <receiver android:name="com.stu.mobilesafe.receiver.BootCompleteReceiver">
+            <intent-filter >
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+            
     </application>
 
 </manifest>

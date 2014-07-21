@@ -5,12 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.stu.mobilesafe.R;
 
 public class LostFindActivity extends Activity {
 	private static final String TAG = "LostFindActivity";
 	private SharedPreferences sp;	
+	private TextView tv_lostfind_number;
+	private ImageView iv_lostfind_status;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,17 @@ public class LostFindActivity extends Activity {
 		if (finishsetup){ // 如果配置过 就显示正常的ui界面
 			//已经完成过设置向导 ，加载正常的ui界面。
 			setContentView(R.layout.activity_lostfind);
+			tv_lostfind_number = (TextView)findViewById(R.id.tv_lostfind_number);
+			String safenumber = sp.getString("safenumber", "");
+			tv_lostfind_number.setText(safenumber);
+			
+			iv_lostfind_status = (ImageView)findViewById(R.id.iv_lostfind_status);
+			boolean protectingstatus = sp.getBoolean("protectingstatus", false);
+			if (protectingstatus){
+				iv_lostfind_status.setImageResource(R.drawable.lock);
+			}else {
+				iv_lostfind_status.setImageResource(R.drawable.unlock);
+			}			
 		} else {
 			//定向页面到设置向导界面。
 			Intent intent = new Intent();
