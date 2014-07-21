@@ -58,4 +58,9 @@ public class Setup3Activity extends BaseSetupActivity {
 		pre(null);
 	}
 	
+	public void selectContact(View view){
+		Intent intent = new Intent(this, SelectContactActivity.class);
+		startActivity(intent);
+	}
+	
 }
