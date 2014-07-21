@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemClock;
 
 import com.stu.mobilesafe.domain.ContactInfo;
 
@@ -18,6 +19,9 @@ public class ContactInfoProvider {
 	 * @return
 	 */
 	public static List<ContactInfo> getContactInfos(Context context){
+		
+		SystemClock.sleep(3000);
+		
 		ContentResolver resolver = context.getContentResolver();
 		
 		List<ContactInfo> infos = new ArrayList<>();
