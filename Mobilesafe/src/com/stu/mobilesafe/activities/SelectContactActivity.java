@@ -1,20 +1,22 @@
 package com.stu.mobilesafe.activities;
 
 import java.util.List;
-import java.util.zip.Inflater;
-
-import com.stu.mobilesafe.R;
-import com.stu.mobilesafe.domain.ContactInfo;
-import com.stu.mobilesafe.engine.ContactInfoProvider;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.stu.mobilesafe.R;
+import com.stu.mobilesafe.domain.ContactInfo;
+import com.stu.mobilesafe.engine.ContactInfoProvider;
 
 public class SelectContactActivity extends Activity {
 
@@ -44,7 +46,17 @@ public class SelectContactActivity extends Activity {
 			};
 		}.start();
 		
-		
+		lv_contacts.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				String phone = infos.get(position).getPhone();
+				Intent data= new Intent();
+				data.putExtra("phone", phone);
+				setResult(0, data); // 设置返回数据
+				finish();  //关闭本Activity
+			}
+		});
 	}
 	
 	private class ContactAdapter extends BaseAdapter{

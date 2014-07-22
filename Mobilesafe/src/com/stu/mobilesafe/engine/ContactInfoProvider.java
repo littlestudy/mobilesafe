@@ -31,20 +31,22 @@ public class ContactInfoProvider {
 		Cursor cursor = resolver.query(raw_contactUri, new String[]{"contact_id"}, null, null, null);
 		while (cursor.moveToNext()){
 			String id = cursor.getString(0);
-			ContactInfo info = new ContactInfo();
-			Cursor dataCursor = resolver.query(dataUri, new String[]{"data1", "mimetype"} 
+			if (id != null){
+				ContactInfo info = new ContactInfo();
+				Cursor dataCursor = resolver.query(dataUri, new String[]{"data1", "mimetype"} 
 										, "raw_contact_id=?", new String[]{id}, null);
-			while(dataCursor.moveToNext()){
-				String data1 = dataCursor.getString(0);
-				String mimetype = dataCursor.getString(1);
-				if ("vnd.android.cursor.item/name".equals(mimetype)){
-					info.setName(data1);
-				} else if ("vnd.android.cursor.item/phone_v2".equals(mimetype)){
-					info.setPhone(data1);
+				while(dataCursor.moveToNext()){
+					String data1 = dataCursor.getString(0);
+					String mimetype = dataCursor.getString(1);
+					if ("vnd.android.cursor.item/name".equals(mimetype)){
+						info.setName(data1);
+					} else if ("vnd.android.cursor.item/phone_v2".equals(mimetype)){
+						info.setPhone(data1);
+					}
 				}
+				dataCursor.close();
+				infos.add(info);
 			}
-			dataCursor.close();
-			infos.add(info);
 		}
 		cursor.close();
 		

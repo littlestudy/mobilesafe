@@ -60,7 +60,15 @@ public class Setup3Activity extends BaseSetupActivity {
 	
 	public void selectContact(View view){
 		Intent intent = new Intent(this, SelectContactActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, 0);
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (data != null){
+			String phone = data.getStringExtra("phone");
+			et_setup3_phone.setText(phone);
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 }
